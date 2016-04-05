@@ -1,4 +1,4 @@
-class DiscoveredHostsController < ::ApplicationController
+class DiscoveryFacetsController < ::ApplicationController
   include Foreman::Controller::AutoCompleteSearch
   include Foreman::Controller::TaxonomyMultiple
   include Foreman::Controller::DiscoveredExtensions
@@ -19,9 +19,9 @@ class DiscoveredHostsController < ::ApplicationController
     @hosts = resource_base.search_for(params[:search], :order => params[:order]).includes([
       :location,
       :organization,
-      :model,
+      :subnet,
       :discovery_attribute_set
-    ], {:interfaces => :subnet}).paginate(:page => params[:page])
+    ]).paginate(:page => params[:page])
     fact_array = @hosts.collect do |host|
       [host.id, Hash[host.fact_values.joins(:fact_name).where('fact_names.name' => Setting::Discovered.discovery_fact_column_array).pluck(:name, :value)]]
     end
@@ -208,7 +208,7 @@ class DiscoveredHostsController < ::ApplicationController
   end
 
   def resource_base
-    @resource_base ||= ::Host::Discovered.authorized(current_permission, ::Host::Discovered)
+    @resource_base ||= DiscoveryFacet.authorized(current_permission, DiscoveryFacet) #::Host::Discovered.authorized(current_permission, ::Host::Discovered)
   end
 
   def load_vars_for_ajax
@@ -232,7 +232,7 @@ class DiscoveredHostsController < ::ApplicationController
   end
 
   def controller_permission
-    'discovered_hosts'
+    'discovery_facets'
   end
 
   def action_permission

@@ -1,5 +1,5 @@
 class DiscoveredMailer < ::ApplicationMailer
-  helper :discovered_hosts
+  helper :discovery_facets
   def discovered_summary(options = {})
     raise ::Foreman::Exception.new(N_("Must specify a user with email enabled")) unless (user = User.find(options[:user])) && user.mail_enabled?
     begin

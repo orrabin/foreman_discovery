@@ -7,7 +7,7 @@ module Api
       skip_before_filter :authorize, :only => :facts
 
       resource_description do
-        resource_id 'discovered_hosts'
+        resource_id 'discovery_facets'
         api_version 'v2'
         api_base_url "/api/v2"
       end
@@ -89,12 +89,13 @@ module Api
         process_response @discovered_host.destroy
       end
 
-      api :POST, "/discovered_hosts/facts", N_("Upload facts for a host, creating the host if required")
+      api :POST, "/discovery_facet/facts", N_("Upload facts for a host, creating the host if required")
       param :facts, Hash, :required => true, :desc => N_("hash containing facts for the host with minimum set of facts: discovery_bootif, macaddress_eth0, ipaddress, ipaddress_eth0, interfaces: eth0 (example in case primary interface is named eth0)")
 
       def facts
         state = true
-        @discovered_host, state = Host::Discovered.import_host_and_facts(params[:facts])
+        binding.pry
+        @discovered_host, state = DiscoveryFacet.from_facts(params[:facts])
         if Setting['discovery_auto']
           if state && rule = find_discovery_rule(@discovered_host)
             state = perform_auto_provision(@discovered_host, rule)

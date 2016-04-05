@@ -51,30 +51,30 @@ module ForemanDiscovery
         # discovered hosts permissions
         security_block :discovery do
           permission :view_discovered_hosts, {
-            :discovered_hosts          => [:index, :show, :auto_complete_search],
-            :"api/v2/discovered_hosts" => [:index, :show]
+            :discovery_facets          => [:index, :show, :auto_complete_search],
+            :"api/v2/discovery_facets" => [:index, :show]
           }, :resource_type => 'Host'
           permission :submit_discovered_hosts, {
-            :"api/v2/discovered_hosts" => [:facts, :create]
+            :"api/v2/discovery_facets" => [:facts, :create]
           }, :resource_type => 'Host'
           permission :auto_provision_discovered_hosts, {
-            :discovered_hosts          => [:auto_provision, :auto_provision_all],
-            :"api/v2/discovered_hosts" => [:auto_provision, :auto_provision_all]
+            :discovery_facets          => [:auto_provision, :auto_provision_all],
+            :"api/v2/discovery_facets" => [:auto_provision, :auto_provision_all]
           }, :resource_type => 'Host'
           permission :provision_discovered_hosts, {
-            :discovered_hosts          => [:edit, :update],
-            :"api/v2/discovered_hosts" => [:update]
+            :discovery_facets          => [:edit, :update],
+            :"api/v2/discovery_facets" => [:update]
           }, :resource_type => 'Host'
           permission :edit_discovered_hosts, {
-            :discovered_hosts          => [:update_multiple_location,
+            :discovery_facets          => [:update_multiple_location,
                                            :select_multiple_organization,
                                            :update_multiple_organization,
                                            :select_multiple_location, :refresh_facts, :reboot, :reboot_all],
-            :"api/v2/discovered_hosts" => [:refresh_facts, :reboot, :reboot_all]
+            :"api/v2/discovery_facets" => [:refresh_facts, :reboot, :reboot_all]
           }, :resource_type => 'Host'
           permission :destroy_discovered_hosts, {
-            :discovered_hosts          => [:destroy, :submit_multiple_destroy, :multiple_destroy],
-            :"api/v2/discovered_hosts" => [:destroy]
+            :discovery_facets          => [:destroy, :submit_multiple_destroy, :multiple_destroy],
+            :"api/v2/discovery_facets" => [:destroy]
           }, :resource_type => 'Host'
         end
 
@@ -107,7 +107,7 @@ module ForemanDiscovery
           :view_organizations,
           :view_locations,
           :view_hosts,
-          # discovered_hosts
+          # discovery_facets
           :view_discovered_hosts,
           # discovered_rules
           :view_discovery_rules,
@@ -116,7 +116,7 @@ module ForemanDiscovery
           # core permissions
           :assign_organizations,
           :assign_locations,
-          # discovered_hosts
+          # discovery_facets
           :submit_discovered_hosts,
           :provision_discovered_hosts,
           :auto_provision_discovered_hosts,
@@ -132,7 +132,7 @@ module ForemanDiscovery
         role "Discovery Manager", MANAGER
 
         # menu entries
-        menu :top_menu, :discovered_hosts, :url_hash => {:controller => :discovered_hosts, :action => :index},
+        menu :top_menu, :discovery_facets, :url_hash => {:controller => :discovery_facets, :action => :index},
           :caption=> N_('Discovered hosts'),
           :parent => :hosts_menu,
           :after=>:hosts
@@ -156,7 +156,7 @@ module ForemanDiscovery
 
     initializer "foreman_discovery.apipie" do
       if Apipie.configuration.respond_to?(:checksum_path)
-        Apipie.configuration.checksum_path += ['/discovered_hosts/']
+        Apipie.configuration.checksum_path += ['/discovery_facets/']
       end
     end
 

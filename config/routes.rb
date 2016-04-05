@@ -5,9 +5,10 @@ Rails.application.routes.draw do
   post 'architecture_selected_discovered_hosts' => 'hosts#architecture_selected'
   post 'os_selected_discovered_hosts'           => 'hosts#os_selected'
   post 'medium_selected_discovered_hosts'       => 'hosts#medium_selected'
+   # backward compatibility
 
   constraints(:id => /[^\/]+/) do
-    resources :discovered_hosts, :except => [:new, :create] do
+    resources :discovery_facets, :except => [:new, :create] do
       member do
         get 'refresh_facts'
         put 'reboot'
@@ -37,7 +38,11 @@ Rails.application.routes.draw do
   ## API
   namespace :api, :defaults => {:format => 'json'} do
     scope "(:apiv)", :module => :v2, :defaults => {:apiv => 'v2'}, :apiv => /v1|v2/, :constraints => ApiConstraints.new(:version => 2) do
-      resources :discovered_hosts, :except => [:new, :edit] do
+      resources :discovered_hosts, :only => [] do
+        post :facts, :on => :collection
+      end
+
+      resources :discovery_facets, :except => [:new, :edit] do
         member do
           post 'auto_provision'
           put 'reboot'

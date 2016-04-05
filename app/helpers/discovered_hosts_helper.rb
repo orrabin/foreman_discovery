@@ -12,10 +12,10 @@ module DiscoveredHostsHelper
   end
 
   def discovered_hosts_title_actions(host)
-    actions = [[_('Provision'),  hash_for_edit_discovered_host_path(:id => host)]]
-    actions <<  [_('Auto Provision'), hash_for_auto_provision_discovered_host_path(:id => host), :method => :post]
-    actions <<  [_('Refresh facts') ,hash_for_refresh_facts_discovered_host_path(:id => host)]
-    actions <<  [_('Reboot') ,hash_for_reboot_discovered_host_path(:id => host), :method => :put]
+    actions = [[_('Provision'),  hash_for_edit_discovery_facets_path(:id => host)]]
+    actions <<  [_('Auto Provision'), hash_for_auto_provision_discovery_facets_path(:id => host), :method => :post]
+    actions <<  [_('Refresh facts') ,hash_for_refresh_facts_discovery_facets_path(:id => host)]
+    actions <<  [_('Reboot') ,hash_for_reboot_discovery_facets_path(:id => host), :method => :put]
     title_actions(
         button_group(
             link_to(_("Back"), :back)
@@ -32,16 +32,16 @@ module DiscoveredHostsHelper
         )
       ),
       button_group(
-        link_to(_("Delete"), hash_for_discovered_host_path(:id => host),
+        link_to(_("Delete"), hash_for_discovery_facets_path(:id => host),
                 :class => "btn btn-danger", :confirm => _('Are you sure?'), :method => :delete)
       )
     )
   end
 
   def multiple_discovered_hosts_actions_select
-    actions = [[_('Delete hosts'), multiple_destroy_discovered_hosts_path, hash_for_multiple_destroy_discovered_hosts_path]]
-    actions <<  [_('Assign Organization'), select_multiple_organization_discovered_hosts_path,  hash_for_select_multiple_organization_discovered_hosts_path] if SETTINGS[:organizations_enabled]
-    actions <<  [_('Assign Location'), select_multiple_location_discovered_hosts_path,  hash_for_select_multiple_location_discovered_hosts_path] if SETTINGS[:locations_enabled]
+    actions = [[_('Delete hosts'), multiple_destroy_discovery_facets_path, hash_for_multiple_destroy_discovery_facets_path]]
+    actions <<  [_('Assign Organization'), select_multiple_organization_discovery_facets_path,  hash_for_select_multiple_organization_discovery_facets_path] if SETTINGS[:organizations_enabled]
+    actions <<  [_('Assign Location'), select_multiple_location_discovery_facets_path,  hash_for_select_multiple_location_discovery_facets_path] if SETTINGS[:locations_enabled]
 
     select_action_button( _("Select Action"), {:id => 'submit_multiple'},
       actions.map do |action|
@@ -59,8 +59,8 @@ module DiscoveredHostsHelper
   end
 
   def authorized_for_edit_destroy?
-    authorized_for(:controller => :discovered_hosts, :action => :edit) or
-        authorized_for(:controller => :discovered_hosts, :action => :destroy)
+    authorized_for(:controller => :discovery_facets, :action => :edit) or
+        authorized_for(:controller => :discovery_facets, :action => :destroy)
   end
 
   def discovery_status_icon(host)

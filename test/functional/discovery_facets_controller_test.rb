@@ -1,7 +1,7 @@
 require 'test_plugin_helper'
 require 'test_helper_discovery'
 
-class DiscoveredHostsControllerTest < ActionController::TestCase
+class DiscoveryFacetsControllerTest < ActionController::TestCase
   setup :initialize_host
 
   setup do
@@ -67,7 +67,7 @@ class DiscoveredHostsControllerTest < ActionController::TestCase
   def test_add_entry_to_nav_menu
     get :index, {}, set_session_user
     assert_tag :tag        => 'a',
-               :attributes => { :href => '/discovered_hosts' }
+               :attributes => { :href => '/discovery_facets' }
   end
 
   def test_reboot_success
